@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".RfidActivity"
+    tools:showIn="@layout/activity_rfid">
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="match_parent"
+        android:layout_height="420dp"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/rfid1" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:layout_below="@id/img"
+        android:layout_alignEnd="@+id/img"
+        android:layout_centerHorizontal="false"
+        android:text="@string/please_approach_the_tag_identification"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="30dp" />
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/cancel"
+        android:text="@string/cancel" />
+
+
+</RelativeLayout>
