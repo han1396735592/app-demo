@@ -7,13 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +25,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.example.myapplication.MainActivity;
 import com.example.myapplication.RfidActivity;
 import com.example.myapplication.ui.entity.GridIcon;
 import com.example.myapplication.utils.CommonBaseAdapter;
@@ -44,10 +41,10 @@ import java.util.stream.Stream;
 
 public class HomeFragment extends Fragment {
     private final String TAG = "HomeFragment";
-    ArrayList<GridIcon> objs = new ArrayList<>();
+    private ArrayList<GridIcon> objs = new ArrayList<>();
     private GridView gridView;
     private ViewGroup container;
-    CommonBaseAdapter<GridIcon> objCommonBaseAdapter;
+    private CommonBaseAdapter<GridIcon> objCommonBaseAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -154,7 +151,9 @@ public class HomeFragment extends Fragment {
     public void f2() {
         FragmentActivity activity = getActivity();
         Intent intent = new Intent(activity, RfidActivity.class);
-        activity.startActivity(intent);
+        if (activity != null) {
+            activity.startActivity(intent);
+        }
     }
 
     public void f1() {
@@ -162,7 +161,9 @@ public class HomeFragment extends Fragment {
         if (activity instanceof HomeFragmentInvokeActivityMethod) {
             ((HomeFragmentInvokeActivityMethod) activity).toDashboard();
         } else {
-            Log.e(TAG, "f1: " + activity.getClass());
+            if (activity != null) {
+                Log.e(TAG, "f1: " + activity.getClass());
+            }
         }
     }
 
