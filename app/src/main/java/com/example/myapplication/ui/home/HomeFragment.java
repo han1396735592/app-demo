@@ -35,6 +35,7 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,6 +58,17 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
+    public void del(){
+        objCommonBaseAdapter.remove(objCommonBaseAdapter.getCount()-1);
+    }
+
+    public void add() {
+        GridIcon gridIcon = new GridIcon();
+        gridIcon.setTitle("小黄人");
+        gridIcon.setImgSrc("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1577634374229&di=88a10eca70d62a512e83da8f3dd749aa&imgtype=0&src=http%3A%2F%2Fimages6.fanpop.com%2Fimage%2Fphotos%2F40500000%2Fnewclubimage-despicable-me-minions-40532353-5038-4325.jpg");
+        objCommonBaseAdapter.add(gridIcon);
+    }
+
     private void initView() {
         objCommonBaseAdapter =
                 new CommonBaseAdapter<GridIcon>(viewGroup.getContext(), objs, R.layout.me_item) {
@@ -76,25 +88,50 @@ public class HomeFragment extends Fragment {
                         imageView.setLayoutParams(layoutParams);
                         Glide.with(viewGroup).load(obj.getImgSrc())
                                 .into(imageView);
+                        GridIcon.Action action = obj.getAction();
+                        if (action != null) {
+                            bindAction(convertView, action);
+                        }
+                    }
+
+                    private void bindAction(RelativeLayout convertView, GridIcon.Action action) {
+                        Log.i(TAG, "bindAction: "+convertView+" on " + new Gson().toJson(action));
+                        convertView.setOnClickListener(v -> {
+                            switch (action.getType()) {
+                                case GridIcon.Action.ACTION_TYPE_SHOW:
+                                    Toast.makeText(convertView.getContext(), action.getShowMsg(), Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, "bindAction: " + action.getShowMsg() + " : ");
+                                    break;
+                                case GridIcon.Action.ACTION_TYPE_METHOD:
+                                    Log.d(TAG, "bindAction: " + action.getMethod() + " : " + action.getMethodParam());
+                                    HomeFragment homeFragment = HomeFragment.this;
+                                    try {
+                                        Method method = homeFragment.getClass().getMethod(action.getMethod());
+                                        method.invoke(homeFragment);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
+                            }
+                        });
                     }
                 };
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                GridIcon item = objCommonBaseAdapter.getItem(position);
-                Toast toast = Toast.makeText(viewGroup.getContext(), item.getTitle(), Toast.LENGTH_SHORT);
-                toast.show();
-                GridIcon gridIcon = new GridIcon();
-                gridIcon.setTitle("小黄人");
-                gridIcon.setImgSrc("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1577634374229&di=88a10eca70d62a512e83da8f3dd749aa&imgtype=0&src=http%3A%2F%2Fimages6.fanpop.com%2Fimage%2Fphotos%2F40500000%2Fnewclubimage-despicable-me-minions-40532353-5038-4325.jpg");
-                objCommonBaseAdapter.add(gridIcon);
-            }
-        });
+//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                GridIcon item = objCommonBaseAdapter.getItem(position);
+//                Toast toast = Toast.makeText(viewGroup.getContext(), item.getTitle(), Toast.LENGTH_SHORT);
+//                toast.show();
+//                GridIcon gridIcon = new GridIcon();
+//                gridIcon.setTitle("小黄人");
+//                gridIcon.setImgSrc("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1577634374229&di=88a10eca70d62a512e83da8f3dd749aa&imgtype=0&src=http%3A%2F%2Fimages6.fanpop.com%2Fimage%2Fphotos%2F40500000%2Fnewclubimage-despicable-me-minions-40532353-5038-4325.jpg");
+//                objCommonBaseAdapter.add(gridIcon);
+//            }
+//        });
         gridView.setAdapter(objCommonBaseAdapter);
     }
 
     private void ininData() {
-
         RequestQueue requestQueue = Volley.newRequestQueue(viewGroup.getContext());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest("https://qqhxj.oss-cn-beijing.aliyuncs.com/test/item.json", new Response.Listener<JSONArray>() {
             @Override
