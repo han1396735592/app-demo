@@ -2,8 +2,10 @@ package com.example.myapplication;
 
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.myapplication.ui.home.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -16,7 +18,10 @@ import androidx.navigation.ui.NavigationUI;
 import java.io.File;
 import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements HomeFragment.HomeFragmentInvokeActivityMethod {
+
+    private final String TAG = this.getClass().getName();
+    public NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +33,15 @@ public class MainActivity extends AppCompatActivity {
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-        String extStorageState = Environment.getExternalStorageState();
-        System.out.println(extStorageState+"=====");
 
     }
 
+    @Override
+    public void toDashboard() {
+        Log.d(TAG, "f1 on  MainActivity Invoke");
+        navController.navigate(R.id.navigation_dashboard);
+    }
 }

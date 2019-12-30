@@ -34,14 +34,24 @@ public class GridIcon {
         public static final int ACTION_TYPE_METHOD = 2;
         public static final int ACTION_TYPE_SERVICE = 3;
         public static final int ACTION_TYPE_INTENT = 4;
+        public static final int ACTION_TYPE_ACTIVITY = 5;
         private int type;
         private String showMsg;
         private String method;
-        private String methodParam;
+        private Object[] methodParam;
         private String serviceName;
-        private String serviceParam;
+        private Object[] serviceParam;
         private String intentName;
-        private String intentParam;
+        private Object[] intentParam;
+        private String activity;
+
+        public String getActivity() {
+            return activity;
+        }
+
+        public void setActivity(String activity) {
+            this.activity = activity;
+        }
 
         public int getType() {
             return type;
@@ -67,11 +77,11 @@ public class GridIcon {
             this.method = method;
         }
 
-        public String getMethodParam() {
+        public Object[] getMethodParam() {
             return methodParam;
         }
 
-        public void setMethodParam(String methodParam) {
+        public void setMethodParam(Object[] methodParam) {
             this.methodParam = methodParam;
         }
 
@@ -83,14 +93,6 @@ public class GridIcon {
             this.serviceName = serviceName;
         }
 
-        public String getServiceParam() {
-            return serviceParam;
-        }
-
-        public void setServiceParam(String serviceParam) {
-            this.serviceParam = serviceParam;
-        }
-
         public String getIntentName() {
             return intentName;
         }
@@ -99,11 +101,19 @@ public class GridIcon {
             this.intentName = intentName;
         }
 
-        public String getIntentParam() {
+        public Object[] getServiceParam() {
+            return serviceParam;
+        }
+
+        public void setServiceParam(Object[] serviceParam) {
+            this.serviceParam = serviceParam;
+        }
+
+        public Object[] getIntentParam() {
             return intentParam;
         }
 
-        public void setIntentParam(String intentParam) {
+        public void setIntentParam(Object[] intentParam) {
             this.intentParam = intentParam;
         }
     }

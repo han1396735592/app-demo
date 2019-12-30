@@ -1,65 +1,70 @@
 package com.example.myapplication.ui.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.example.myapplication.ui.GridIcon;
+import com.example.myapplication.MainActivity;
+import com.example.myapplication.RfidActivity;
+import com.example.myapplication.ui.entity.GridIcon;
 import com.example.myapplication.utils.CommonBaseAdapter;
 import com.example.myapplication.R;
 import com.example.myapplication.utils.ViewHolder;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.stream.Stream;
 
 public class HomeFragment extends Fragment {
     private final String TAG = "HomeFragment";
     ArrayList<GridIcon> objs = new ArrayList<>();
     private GridView gridView;
-    private ViewGroup viewGroup;
+    private ViewGroup container;
     CommonBaseAdapter<GridIcon> objCommonBaseAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         gridView = root.findViewById(R.id.list_view);
-        viewGroup = container;
+        this.container = container;
         initView();
         ininData();
         return root;
     }
 
-    public void del(){
-        objCommonBaseAdapter.remove(objCommonBaseAdapter.getCount()-1);
+    public void delLast(String len) {
+        if (objCommonBaseAdapter.getCount() > Integer.parseInt(len)) {
+            objCommonBaseAdapter.remove(objCommonBaseAdapter.getCount() - 1);
+        } else {
+            Toast.makeText(container.getContext(), "至少" + len + "个", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void add() {
@@ -71,7 +76,7 @@ public class HomeFragment extends Fragment {
 
     private void initView() {
         objCommonBaseAdapter =
-                new CommonBaseAdapter<GridIcon>(viewGroup.getContext(), objs, R.layout.me_item) {
+                new CommonBaseAdapter<GridIcon>(container.getContext(), objs, R.layout.me_item) {
                     @Override
                     public void bindView(ViewHolder viewHolder, GridIcon obj) {
                         RelativeLayout convertView = ((RelativeLayout) viewHolder.getConvertView());
@@ -86,53 +91,83 @@ public class HomeFragment extends Fragment {
                         layoutParams.width = (int) (width * 0.8);
                         layoutParams.height = (int) (width * 0.8);
                         imageView.setLayoutParams(layoutParams);
-                        Glide.with(viewGroup).load(obj.getImgSrc())
+                        Glide.with(container).load(obj.getImgSrc())
                                 .into(imageView);
-                        GridIcon.Action action = obj.getAction();
-                        if (action != null) {
-                            bindAction(convertView, action);
-                        }
-                    }
-
-                    private void bindAction(RelativeLayout convertView, GridIcon.Action action) {
-                        Log.i(TAG, "bindAction: "+convertView+" on " + new Gson().toJson(action));
-                        convertView.setOnClickListener(v -> {
-                            switch (action.getType()) {
-                                case GridIcon.Action.ACTION_TYPE_SHOW:
-                                    Toast.makeText(convertView.getContext(), action.getShowMsg(), Toast.LENGTH_SHORT).show();
-                                    Log.d(TAG, "bindAction: " + action.getShowMsg() + " : ");
-                                    break;
-                                case GridIcon.Action.ACTION_TYPE_METHOD:
-                                    Log.d(TAG, "bindAction: " + action.getMethod() + " : " + action.getMethodParam());
-                                    HomeFragment homeFragment = HomeFragment.this;
-                                    try {
-                                        Method method = homeFragment.getClass().getMethod(action.getMethod());
-                                        method.invoke(homeFragment);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                    break;
-                            }
-                        });
                     }
                 };
-//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                GridIcon item = objCommonBaseAdapter.getItem(position);
-//                Toast toast = Toast.makeText(viewGroup.getContext(), item.getTitle(), Toast.LENGTH_SHORT);
-//                toast.show();
-//                GridIcon gridIcon = new GridIcon();
-//                gridIcon.setTitle("小黄人");
-//                gridIcon.setImgSrc("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1577634374229&di=88a10eca70d62a512e83da8f3dd749aa&imgtype=0&src=http%3A%2F%2Fimages6.fanpop.com%2Fimage%2Fphotos%2F40500000%2Fnewclubimage-despicable-me-minions-40532353-5038-4325.jpg");
-//                objCommonBaseAdapter.add(gridIcon);
-//            }
-//        });
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                GridIcon item = objCommonBaseAdapter.getItem(position);
+                GridIcon.Action action = item.getAction();
+                if (action != null) {
+                    switch (action.getType()) {
+                        case GridIcon.Action.ACTION_TYPE_SHOW:
+                            Toast.makeText(container.getContext(), action.getShowMsg(), Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "bindAction: " + action.getShowMsg() + " : ");
+                            break;
+                        case GridIcon.Action.ACTION_TYPE_METHOD:
+                            Log.d(TAG, "bindAction: " + action.getMethod() + " : " + action.getMethodParam());
+                            invokeMethod(action);
+                            break;
+                        case GridIcon.Action.ACTION_TYPE_ACTIVITY:
+                            invokeActivity(action);
+                            break;
+                    }
+                }
+            }
+        });
         gridView.setAdapter(objCommonBaseAdapter);
     }
 
+    private void invokeActivity(GridIcon.Action action) {
+        String activityPack = action.getActivity();
+        try {
+            FragmentActivity activity = getActivity();
+            Class<?> className = Class.forName(activityPack);
+            if (activity != null) {
+                Intent intent = new Intent(activity, className);
+                activity.startActivity(intent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void invokeMethod(GridIcon.Action action) {
+        try {
+            Object[] methodParam = action.getMethodParam();
+            Class<? extends HomeFragment> fragmentClass = this.getClass();
+            if (methodParam != null && methodParam.length > 0) {
+                Class[] classes = Stream.of(methodParam).map(Object::getClass).toArray(Class[]::new);
+                Method method = fragmentClass.getMethod(action.getMethod(), classes);
+                method.invoke(this, methodParam);
+            } else {
+                Method method = fragmentClass.getMethod(action.getMethod());
+                method.invoke(this);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void f2() {
+        FragmentActivity activity = getActivity();
+        Intent intent = new Intent(activity, RfidActivity.class);
+        activity.startActivity(intent);
+    }
+
+    public void f1() {
+        FragmentActivity activity = this.getActivity();
+        if (activity instanceof HomeFragmentInvokeActivityMethod) {
+            ((HomeFragmentInvokeActivityMethod) activity).toDashboard();
+        } else {
+            Log.e(TAG, "f1: " + activity.getClass());
+        }
+    }
+
     private void ininData() {
-        RequestQueue requestQueue = Volley.newRequestQueue(viewGroup.getContext());
+        RequestQueue requestQueue = Volley.newRequestQueue(container.getContext());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest("https://qqhxj.oss-cn-beijing.aliyuncs.com/test/item.json", new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -154,5 +189,9 @@ public class HomeFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy: ");
+    }
+
+    public interface HomeFragmentInvokeActivityMethod {
+        void toDashboard();
     }
 }

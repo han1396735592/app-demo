@@ -1,0 +1,70 @@
+[
+  {
+    "title": "裁缝收料",
+    "imgSrc": "https://qqhxj.oss-cn-beijing.aliyuncs.com/test/icon/RFID%E5%8D%A1%E7%89%87%E5%BA%93.png",
+    "action": {
+      "type": 1,
+      "showMsg": "功能尚未开发"
+    }
+  },
+  {
+    "title": "返修接受",
+    "imgSrc": "https://qqhxj.oss-cn-beijing.aliyuncs.com/test/icon/RFID%E5%8D%A1%E7%89%87%E5%BA%93.png",
+    "action": {
+      "type": 1,
+      "showMsg": "功能尚未开发"
+    }
+  },
+  {
+    "title": "返修报备",
+    "imgSrc": "https://qqhxj.oss-cn-beijing.aliyuncs.com/test/icon/RFID%E5%8D%A1%E7%89%87%E5%BA%93.png",
+    "action": {
+      "type": 1,
+      "showMsg": "功能尚未开发"
+    }
+  },
+  {
+    "title": "物料识别",
+    "imgSrc": "https://qqhxj.oss-cn-beijing.aliyuncs.com/test/icon/RFID%E5%8D%A1%E7%89%87%E5%BA%93.png",
+    "action": {
+      "type": 5,
+      "showMsg": "功能尚未开发",
+      "activity": "com.example.myapplication.RfidActivity"
+    }
+  },
+  {
+    "title": "增加",
+    "imgSrc": "https://qqhxj.oss-cn-beijing.aliyuncs.com/test/icon/%E5%8A%A0.png",
+    "action": {
+      "type": 2,
+      "method": "add"
+    }
+  },
+  {
+    "title": "减少",
+    "imgSrc": "https://qqhxj.oss-cn-beijing.aliyuncs.com/test/icon/%E5%87%8F.png",
+    "action": {
+      "type": 2,
+      "method": "delLast",
+      "methodParam": [
+        "8"
+      ]
+    }
+  },
+  {
+    "title": "扫码",
+    "imgSrc": "https://qqhxj.oss-cn-beijing.aliyuncs.com/test/icon/%E6%89%AB%E7%A0%81-1-select.png",
+    "action": {
+      "type": 2,
+      "method": "f1"
+    }
+  },
+  {
+    "title": "小黄人",
+    "imgSrc": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1577634374229&di=88a10eca70d62a512e83da8f3dd749aa&imgtype=0&src=http%3A%2F%2Fimages6.fanpop.com%2Fimage%2Fphotos%2F40500000%2Fnewclubimage-despicable-me-minions-40532353-5038-4325.jpg",
+    "action": {
+      "type": 1,
+      "showMsg": "小黄人"
+    }
+  }
+]
