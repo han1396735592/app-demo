@@ -14,15 +14,15 @@
         android:layout_height="420dp"
         android:layout_centerHorizontal="true"
         android:src="@mipmap/rfid1"
-        android:contentDescription="TODO" />
+        android:contentDescription="@string/please_approach_the_tag_identification" />
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="100dp"
         android:layout_below="@id/img"
-        android:lineHeight="100dp"
         android:layout_alignEnd="@+id/img"
-        android:layout_centerHorizontal="false"
+        android:layout_centerHorizontal="true"
+        android:lineHeight="100dp"
         android:text="@string/please_approach_the_tag_identification"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
@@ -35,7 +35,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@color/cancel"
-        android:text="@string/cancel" />
+        android:text="@string/cancel"
+        android:textAlignment="center" />
 
 
 </RelativeLayout>
