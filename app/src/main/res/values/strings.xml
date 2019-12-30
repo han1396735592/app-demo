@@ -8,5 +8,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_rfid">RFID 识别</string>
     <string name="cancel">Cancel</string>
-    <string name="please_approach_the_tag_identification">请靠近标签识别</string>
+    <string name="please_approach_the_tag_identification">请靠近标签识别【点击图片，模拟识别】</string>
 </resources>
